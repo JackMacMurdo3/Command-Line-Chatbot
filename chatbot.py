@@ -34,10 +34,10 @@ class OpenRouterChatbot:
     def get_response(self, user_input):
         print(f"Thinking about: '{user_input}'...")
         
-        # Step 1: Add the user's message to our conversation history
+        # Add the user's message to our conversation history
         self.add_message("user", user_input)
         
-        # Step 2: Prepare the HTTP headers (like an envelope's address)
+        # Prepare the HTTP headers (like an envelope's address)
         headers = {
             "Authorization": f"Bearer {self.api_key}",  # API key for access
             "Content-Type": "application/json"          # Tell API we're sending JSON
@@ -88,6 +88,7 @@ class OpenRouterChatbot:
 if __name__ == "__main__":
     print("Welcome to the OpenRouter Command Line Chatbot!")
     print("Type 'quit' to exit\n")
+    print("Type '/help' for commands.\n")
     
     try:
         # Create our chatbot
@@ -102,7 +103,20 @@ if __name__ == "__main__":
             if user_input.lower() in ['quit', 'exit', 'bye']:
                 print("Goodbye!")
                 break
-            
+
+            # Command support
+            if user_input.startswith('/'):
+                if user_input == '/reset':
+                    bot.conversation_history = []
+                    print("Conversation history reset.\n")
+                    continue
+                elif user_input == '/help':
+                    print("Commands:\n  /reset - Clear conversation history\n  /help - Show this help message\n  quit/exit/bye - Exit chatbot\n")
+                    continue
+                else:
+                    print("Unknown command. Type '/help' for a list of commands.\n")
+                    continue
+
             if not user_input:  # Skip empty messages
                 continue
                 
